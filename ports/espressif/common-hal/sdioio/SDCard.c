@@ -16,7 +16,7 @@
 #include "py/runtime.h"
 
 #include "esp_log.h"
-static const char* TAG = "SDCard.c";
+static const char *TAG = "SDCard.c";
 
 static bool sdio_host_init = false;
 
@@ -32,8 +32,7 @@ STATIC int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, 
         if (num_data == 1 || (num_data == 4 && data[1]->number == GPIO_NUM_8 && data[2]->number == GPIO_NUM_9 && data[3]->number == GPIO_NUM_10)) {
             return SDMMC_HOST_SLOT_0;
         }
-    }
-    else if (command->number == GPIO_NUM_15 && clock->number == GPIO_NUM_14 && data[0]->number ==2) {
+    } else if (command->number == GPIO_NUM_15 && clock->number == GPIO_NUM_14 && data[0]->number == 2) {
         // Might be slot 1
         if (num_data == 1 || (num_data == 4 && data[1]->number == GPIO_NUM_4 && data[2]->number == GPIO_NUM_12 && data[3]->number == GPIO_NUM_13)) {
             return SDMMC_HOST_SLOT_1;
@@ -54,14 +53,14 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
         // Bad pin combo
         raise_ValueError_invalid_pins();
     }
-    
+
     if (frequency > 40000000) {
         // Higher than max 40Mhz frequency
         mp_raise_ValueError(MP_ERROR_TEXT("SDIO: requested frequency out of range"));
     }
 
     ESP_LOGI(TAG, "Using slot %d", sd_slot);
-    self->slot = (uint8_t) sd_slot;
+    self->slot = (uint8_t)sd_slot;
     esp_err_t err = ESP_OK;
 
     sdmmc_host_t host = SDMMC_HOST_DEFAULT();
@@ -117,7 +116,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
 
     ESP_LOGI(TAG, "Initialized SD card with ID %d:%d-%s",
         self->card.cid.mfg_id, self->card.cid.oem_id, self->card.cid.name);
-    
+
     ESP_LOGI(TAG, "Number of sectors: %d with sector_size: %d",
         self->card.csd.capacity, self->card.csd.sector_size);
 
@@ -152,7 +151,7 @@ int common_hal_sdioio_sdcard_writeblocks(sdioio_sdcard_obj_t *self, uint32_t sta
     esp_err_t err;
     ESP_LOGI(TAG, "in common_hal_sdioio_sdcard_writeblocks");
     // err = sdmmc_io_write_blocks(&self->card, 1, start_block, bufinfo->buf, bufinfo->len);
-    err = sdmmc_write_sectors(&self->card, bufinfo->buf, start_block, bufinfo->len/self->card.csd.sector_size);
+    err = sdmmc_write_sectors(&self->card, bufinfo->buf, start_block, bufinfo->len / self->card.csd.sector_size);
     if (err != ESP_OK) {
         ESP_LOGW(TAG, "Failed to write blocks with err 0x%X", err);
     }
@@ -164,7 +163,7 @@ int common_hal_sdioio_sdcard_readblocks(sdioio_sdcard_obj_t *self, uint32_t star
     esp_err_t err;
     ESP_LOGI(TAG, "in common_hal_sdioio_sdcard_readblocks");
     // err = sdmmc_io_read_blocks(&self->card, 1, start_block, bufinfo->buf, bufinfo->len);
-    err = sdmmc_read_sectors(&self->card, bufinfo->buf, start_block, bufinfo->len/self->card.csd.sector_size);
+    err = sdmmc_read_sectors(&self->card, bufinfo->buf, start_block, bufinfo->len / self->card.csd.sector_size);
     if (err != ESP_OK) {
         ESP_LOGW(TAG, "Failed to read blocks with err 0x%X", err);
     }

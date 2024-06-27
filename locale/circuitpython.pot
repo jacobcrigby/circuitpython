@@ -660,6 +660,11 @@ msgstr ""
 msgid "Buffer length must be a multiple of 512"
 msgstr ""
 
+#: ports/espressif/common-hal/sdioio/SDCard.c
+#, c-format
+msgid "Buffer must be a multiple of %d bytes"
+msgstr ""
+
 #: ports/stm/common-hal/sdioio/SDCard.c shared-bindings/floppyio/__init__.c
 msgid "Buffer must be a multiple of 512 bytes"
 msgstr ""
@@ -1869,6 +1874,14 @@ msgstr ""
 #: ports/stm/common-hal/sdioio/SDCard.c
 #, c-format
 msgid "SDIO Init Error %d"
+msgstr ""
+
+#: ports/espressif/common-hal/sdioio/SDCard.c
+msgid "SDIO: cards have either 1 or 4 data lines"
+msgstr ""
+
+#: ports/espressif/common-hal/sdioio/SDCard.c
+msgid "SDIO: requested frequency out of range"
 msgstr ""
 
 #: ports/espressif/common-hal/busio/SPI.c
